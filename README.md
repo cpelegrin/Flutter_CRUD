@@ -1,7 +1,7 @@
 # Flutter_CRUD
 ## Requisitos
 - cadastro de clientes (simples) 
-- cadastro de imprestimos (simples) 
+- cadastro de Emprestimos (simples) 
 - data do empréstimo 
 - moeda (de preferência utilizar a lista do Banco Central) 
 - valor obtido 
