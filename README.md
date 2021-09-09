@@ -2,11 +2,11 @@
 ## Requisitos
 - cadastro de clientes (simples) 
 - cadastro de Emprestimos (simples) 
--- data do empréstimo 
--- moeda (de preferência utilizar a lista do Banco Central) 
--- valor obtido 
--- data de vencimento
--- taxa de conversão para reais em data atual (de preferência obtida no Banco Central) (somente UI)
+  - data do empréstimo 
+  - moeda (de preferência utilizar a lista do Banco Central) 
+  - valor obtido 
+  - data de vencimento
+  - taxa de conversão para reais em data atual (de preferência obtida no Banco Central) (somente UI)
  
 O sistema deve informar:  
 - número de meses entre a data de vencimento e a data de financiamento 
