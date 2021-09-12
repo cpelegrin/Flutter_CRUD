@@ -19,7 +19,7 @@ class SQLiteHelper {
       onCreate: (db, version) {
         return db.execute(
           'CREATE TABLE IF NOT EXISTS clients('
-          'id INTEGER PRIMARY KEY, '
+          'client_id INTEGER PRIMARY KEY, '
           'name TEXT, '
           'birth_date TEXT,'
           'cpf TEXT NOT NULL UNIQUE,'
@@ -29,15 +29,19 @@ class SQLiteHelper {
           ')',
         );
       },
-      version: 1,
+      version: 3,
     );
 
     _database!.execute(
       'CREATE TABLE IF NOT EXISTS loans('
-      'date TEXT,'
+      'loan_id INTEGER PRIMARY KEY, '
+      'date_of_loan TEXT,'
       'currency_symbol TEXT,'
       'value TEXT,'
-      'maturity TEXT'
+      'maturity TEXT,'
+      'tax TEXT,'
+      'client_id INTEGER NOT NULL,'
+      'FOREIGN KEY(client_id) REFERENCES clients(client_id)'
       ')',
     );
   }

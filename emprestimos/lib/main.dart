@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'Pages/new_client.dart';
+import 'Pages/new_loan.dart';
 import 'Widgets/drawer_navigation_widget.dart';
 
 void main() {
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
         primaryColorDark: Color(0xFF630012),
         accentColor: Color(0xFF02B322),
       ),
-      home: NewClient(),
+      home: NewLoan(),
       // routes: {
       //   '/': (context) => const FirstScreen(),
       //   '/second': (context) => const SecondScreen(),
@@ -28,15 +29,11 @@ class MyApp extends StatelessWidget {
 }
 
 /**
- * cadastro de clientes (simples)
  * cadastro de Emprestimos (simples)
  *
- * Conforme os requisitos acima, é necessário uma lista de clientes e outra de cadastros.
+ * Conforme os requisitos acima, é necessário uma lista de clientes e outra de emprestimos.
  * A homepage deverá mostrar a lista de empréstimos organizada por data, do menor para o maior.
  *
- * Incluir Drawer Navigation com as funcionalidades
- *
- * Inlcuior navegação por rota nomeada
  */
 class LoanList extends StatelessWidget {
   @override
