@@ -308,23 +308,23 @@ class _ListLoansPageState extends State<ListLoansPage> {
         return;
       }
 
-      var date = DateFormat('MM-dd-yyyy').format(DateTime.now());
-      _currencyData!.forEach(
-        (element) async {
-          var url = Uri.parse(
-              "https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoMoedaPeriodoFechamento(codigoMoeda=@codigoMoeda,dataInicialCotacao=@dataInicialCotacao,dataFinalCotacao=@dataFinalCotacao)?%40codigoMoeda='$element'&%40dataInicialCotacao='$date'&%40dataFinalCotacao='$date'&\$format=json");
-          var response = await http.get(url);
-          if (response.statusCode == 200) {
-            var jsonResponse = convert.jsonDecode(response.body);
-            jsonResponse['value'].forEach((currency) {
-              _cotacoesHoje!
-                  .addAll({element: currency['cotacaoCompra'].toString()});
-            });
-          } else {
-            print(response.statusCode);
+      var now = DateTime.now();
+      now = now.subtract(Duration(days: 1));
+      var date = DateFormat('MM-dd-yyyy').format(now);
+      for (var element in _currencyData!) {
+        var url = Uri.parse(
+            "https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoMoedaPeriodoFechamento(codigoMoeda=@codigoMoeda,dataInicialCotacao=@dataInicialCotacao,dataFinalCotacao=@dataFinalCotacao)?%40codigoMoeda='$element'&%40dataInicialCotacao='$date'&%40dataFinalCotacao='$date'&\$format=json");
+        var response = await http.get(url);
+        if (response.statusCode == 200) {
+          var jsonResponse = convert.jsonDecode(response.body);
+          for (var currency in jsonResponse['value']) {
+            _cotacoesHoje!
+                .addAll({element: currency['cotacaoCompra'].toString()});
           }
-        },
-      );
+        } else {
+          print(response.statusCode);
+        }
+      }
     }
   }
 
