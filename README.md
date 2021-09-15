@@ -1,4 +1,7 @@
-# Flutter_CRUD
+# Flutter_CRUD 
+
+Versão do Flutter 2.2.0
+
 ## Requisitos
 - cadastro de clientes (simples) 
 - cadastro de Emprestimos (simples) 
