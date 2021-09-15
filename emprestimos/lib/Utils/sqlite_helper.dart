@@ -128,9 +128,7 @@ class SQLiteHelper {
     await _database!.update(
       'clients',
       client.toMap(),
-      // Ensure that the Dog has a matching id.
       where: 'client_id = ?',
-      // Pass the Dog's id as a whereArg to prevent SQL injection.
       whereArgs: [client.id],
     );
   }
@@ -141,6 +139,25 @@ class SQLiteHelper {
       'clients',
       where: 'client_id = ?',
       whereArgs: [client_id],
+    );
+  }
+
+  updateLoan(Loan loan) async {
+    await _createTables();
+    await _database!.update(
+      'loans',
+      loan.toMap(),
+      where: 'loan_id = ?',
+      whereArgs: [loan.loan_id],
+    );
+  }
+
+  deleteLoan(loan_id) async {
+    await _createTables();
+    return await _database!.delete(
+      'loans',
+      where: 'loan_id = ?',
+      whereArgs: [loan_id],
     );
   }
 }

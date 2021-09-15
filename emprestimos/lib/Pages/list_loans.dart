@@ -82,7 +82,7 @@ class _ListLoansPageState extends State<ListLoansPage> {
                     String valorParcela =
                         valorParcelaDouble.toString().replaceAll(".", ",");
                     if (valorParcela
-                            .substring(0, valorParcela.indexOf(","))
+                            .substring(valorParcela.indexOf(","))
                             .length >
                         3) {
                       valorParcela = valorParcela.substring(
@@ -91,7 +91,7 @@ class _ListLoansPageState extends State<ListLoansPage> {
                     String montanteString =
                         montante.toString().replaceAll(".", ",");
                     if (montanteString
-                            .substring(0, montanteString.indexOf(","))
+                            .substring(montanteString.indexOf(","))
                             .length >
                         3) {
                       montanteString = montanteString.substring(
@@ -205,6 +205,56 @@ class _ListLoansPageState extends State<ListLoansPage> {
                                 ],
                               ),
                             ),
+                          ),
+                          ButtonBar(
+                            alignment: MainAxisAlignment.end,
+                            children: [
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.white,
+                                  onPrimary: Theme.of(context).accentColor,
+                                  side: BorderSide(
+                                      color: Theme.of(context).accentColor,
+                                      width: 1),
+                                ),
+                                onPressed: () async {
+                                  await SQLiteHelper.instance
+                                      .deleteLoan(loans[index].loan_id);
+                                  await SQLiteHelper.instance
+                                      .listLoansJoin()
+                                      .then((loans) => {
+                                            ListLoansPage.loanStreamList
+                                                .add(loans),
+                                          });
+                                  await SQLiteHelper.instance
+                                      .listLoansJoin()
+                                      .then((loans) => {
+                                            ListLoansPage.loanStreamList
+                                                .add(loans),
+                                          });
+                                },
+                                child: const Text('Deletar'),
+                              ),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  onPrimary: Colors.white,
+                                  primary: Theme.of(context).accentColor,
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) {
+                                        return NewLoan(
+                                          loan: loans[index],
+                                        );
+                                      },
+                                    ),
+                                  );
+                                },
+                                child: const Text('Atualizar'),
+                              ),
+                            ],
                           ),
                         ],
                       ),

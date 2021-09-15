@@ -21,6 +21,10 @@ class Loan {
         date_of_loan ?? DateFormat('dd/MM/yyyy').format(DateTime.now());
   }
 
+  setId(int id) {
+    this.loan_id = id;
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'loan_id': loan_id,

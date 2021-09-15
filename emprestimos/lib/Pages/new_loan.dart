@@ -16,6 +16,10 @@ import '../Utils/sqlite_helper.dart';
 import 'list_loans.dart';
 
 class NewLoan extends StatefulWidget {
+  Loan? loan;
+
+  NewLoan({this.loan});
+
   static StreamController<List<Client>> clientStreamList =
       StreamController<List<Client>>();
 
@@ -40,11 +44,18 @@ class _NewLoanState extends State<NewLoan> {
 
   @override
   void initState() {
-    _getInitialData();
+    _init();
     super.initState();
   }
 
-  _getInitialData() async {
+  _init() async {
+    if (widget.loan != null) {
+      _tValor.text = widget.loan!.value!;
+      _tVencimento.text = widget.loan!.maturity!;
+      _tTaxa.text = widget.loan!.tax!;
+      _clientDropdownValue = widget.loan!.client_id!.toString();
+      _currencySymbolDropdownValue = widget.loan!.currency_symbol;
+    }
     if (await ConnectionStatus.testarConexao() != 2) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Problemas na conexão')),
@@ -316,20 +327,24 @@ class _NewLoanState extends State<NewLoan> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Salvando dados!')),
       );
-      print(_clientDropdownValue);
       Client client = (await SQLiteHelper.instance
           .selectClientById(_clientDropdownValue))[0];
-      print(client.name);
 
-      Loan loan = Loan(
-        _currencySymbolDropdownValue,
-        _currencyData![_currencySymbolDropdownValue],
-        _tValor.text,
-        _tVencimento.text,
-        _tTaxa.text,
-        client_id: client.id,
-      );
-      await SQLiteHelper.instance.insertLoan(loan);
+      Loan l = Loan(
+          _currencySymbolDropdownValue,
+          _currencyData![_currencySymbolDropdownValue],
+          _tValor.text,
+          _tVencimento.text,
+          _tTaxa.text,
+          client_id: client.id,
+          clientName: client.name);
+      if (widget.loan != null) {
+        l.setId(widget.loan!.loan_id!);
+        await SQLiteHelper.instance.updateLoan(l);
+      } else {
+        await SQLiteHelper.instance.insertLoan(l);
+      }
+
       await SQLiteHelper.instance.listLoansJoin().then((loans) => {
             ListLoansPage.loanStreamList.add(loans),
           });
