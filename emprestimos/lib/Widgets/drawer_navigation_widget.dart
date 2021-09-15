@@ -1,3 +1,6 @@
+import 'package:emprestimos/Pages/list_clients.dart';
+import 'package:emprestimos/Pages/new_client.dart';
+import 'package:emprestimos/Pages/new_loan.dart';
 import 'package:flutter/material.dart';
 import 'package:mdi/mdi.dart';
 
@@ -37,13 +40,24 @@ class DrawerNavigationWidget extends StatelessWidget {
             leading: Icon(Mdi.cashPlus),
             title: Text("Novo"),
             trailing: Icon(Icons.keyboard_arrow_right),
-            onTap: () async => {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return NewLoan();
+                  },
+                ),
+              );
+            },
           ),
           ListTile(
             leading: Icon(Icons.list_alt_outlined),
             title: Text("Listar"),
             trailing: Icon(Icons.keyboard_arrow_right),
-            onTap: () {},
+            onTap: () {
+              Navigator.pop(context);
+            },
           ),
           SizedBox(height: 30),
           Padding(
@@ -58,13 +72,31 @@ class DrawerNavigationWidget extends StatelessWidget {
             leading: Icon(Mdi.accountPlus),
             title: Text("Novo"),
             trailing: Icon(Icons.keyboard_arrow_right),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return NewClient();
+                  },
+                ),
+              );
+            },
           ),
           ListTile(
             leading: Icon(Mdi.accountDetails),
             title: Text("Listar"),
             trailing: Icon(Icons.keyboard_arrow_right),
-            onTap: () async {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return ListClientsPage();
+                  },
+                ),
+              );
+            },
           ),
         ],
       ),

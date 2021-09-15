@@ -1,10 +1,6 @@
 import 'package:emprestimos/Pages/list_loans.dart';
 import 'package:flutter/material.dart';
 
-import 'Pages/new_client.dart';
-import 'Pages/new_loan.dart';
-import 'Widgets/drawer_navigation_widget.dart';
-
 void main() {
   runApp(MyApp());
 }
@@ -21,28 +17,6 @@ class MyApp extends StatelessWidget {
         accentColor: Color(0xFF02B322),
       ),
       home: ListLoansPage(),
-    );
-  }
-}
-
-/**
- * cadastro de Emprestimos (simples)
- *
- * Conforme os requisitos acima, é necessário uma lista de clientes e outra de emprestimos.
- * A homepage deverá mostrar a lista de empréstimos organizada por data, do menor para o maior.
- *
- */
-class LoanList extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Empréstimos'),
-      ),
-      drawer: SafeArea(
-        child: DrawerNavigationWidget(),
-      ),
-      body: Container(),
     );
   }
 }

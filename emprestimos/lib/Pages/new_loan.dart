@@ -305,16 +305,13 @@ class _NewLoanState extends State<NewLoan> {
               ),
             );
           }
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         },
       ),
     );
   }
 
   _save(context) async {
-    // SQLiteHelper.instance.listLoans().then((loan) => {
-    //       print(loan[0].value),
-    //     });
     if (_formKey.currentState!.validate()) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Salvando dados!')),
@@ -351,5 +348,6 @@ class _NewLoanState extends State<NewLoan> {
   dispose() {
     super.dispose();
     NewLoan.clientStreamList.close();
+    NewLoan.clientStreamList = StreamController<List<Client>>();
   }
 }

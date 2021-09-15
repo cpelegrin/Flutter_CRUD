@@ -25,7 +25,7 @@ class SQLiteHelper {
           'birth_date TEXT,'
           'cpf TEXT NOT NULL UNIQUE,'
           'RG TEXT,'
-          'tel1 TEXT,'
+          'tel TEXT,'
           'email Text'
           ')',
         );
@@ -43,7 +43,8 @@ class SQLiteHelper {
       'maturity TEXT,'
       'tax TEXT,'
       'client_id INTEGER NOT NULL,'
-      'FOREIGN KEY(client_id) REFERENCES clients(client_id)'
+      'FOREIGN KEY(client_id) REFERENCES clients(client_id) '
+      'ON DELETE CASCADE'
       ')',
     );
   }
@@ -67,7 +68,7 @@ class SQLiteHelper {
         maps[i]['birth_date'],
         maps[i]['cpf'],
         maps[i]['RG'],
-        maps[i]['tel1'],
+        maps[i]['tel'],
         maps[i]['email'],
         id: maps[i]['client_id'],
       );
@@ -85,7 +86,7 @@ class SQLiteHelper {
         maps[i]['birth_date'],
         maps[i]['cpf'],
         maps[i]['RG'],
-        maps[i]['tel1'],
+        maps[i]['tel'],
         maps[i]['email'],
         id: maps[i]['client_id'],
       );
@@ -122,10 +123,12 @@ class SQLiteHelper {
     });
   }
 
-  queryaAll() async {
-    _createTables();
-    List<Map> names = await _database!.rawQuery(
-        'SELECT *, name FROM loans INNER JOIN clients USING(client_id)');
-    print(names);
+  deleteClient(client_id) async {
+    await _createTables();
+    return await _database!.delete(
+      'clients',
+      where: 'client_id = ?',
+      whereArgs: [client_id],
+    );
   }
 }

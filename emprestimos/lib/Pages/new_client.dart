@@ -7,6 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:mdi/mdi.dart';
 
+import 'list_clients.dart';
+
 class NewClient extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
 
@@ -154,7 +156,7 @@ class NewClient extends StatelessWidget {
                         TextFormField(
                           decoration: const InputDecoration(
                             icon: Icon(Mdi.phone),
-                            labelText: 'Telefone 1',
+                            labelText: 'Telefone',
                           ),
                           validator: (value) {
                             if (value!.isNotEmpty) {
@@ -224,6 +226,7 @@ class NewClient extends StatelessWidget {
       await SQLiteHelper.instance.insertClient(c);
       await SQLiteHelper.instance.listClients().then((clients) => {
             NewLoan.clientStreamList.add(clients),
+            ListClientsPage.clientStreamList.add(clients),
           });
       final snackBar = SnackBar(
         content: Text('Cliente Salvo com sucesso!'),

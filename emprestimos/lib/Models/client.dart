@@ -3,11 +3,11 @@ class Client {
   String? birth_date;
   String? cpf;
   String? RG;
-  String? tel1;
+  String? tel;
   String? email;
   int? id;
 
-  Client(this.name, this.birth_date, this.cpf, this.RG, this.tel1, this.email,
+  Client(this.name, this.birth_date, this.cpf, this.RG, this.tel, this.email,
       {this.id});
 
   setId(int id) {
@@ -21,7 +21,7 @@ class Client {
       'birth_date': birth_date,
       'cpf': cpf,
       'RG': RG,
-      'tel1': tel1,
+      'tel': tel,
       'email': email,
     };
   }

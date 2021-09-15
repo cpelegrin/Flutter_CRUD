@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:emprestimos/Pages/new_loan.dart';
 import 'package:emprestimos/Utils/connection_status.dart';
+import 'package:emprestimos/Widgets/drawer_navigation_widget.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert' as convert;
 
@@ -21,18 +23,19 @@ class ListLoansPage extends StatefulWidget {
 class _ListLoansPageState extends State<ListLoansPage> {
   @override
   void initState() {
-    // SQLiteHelper.instance.listLoans().then((loans) => {
-    //       ListLoansPage.loanStreamList.add(loans),
-    //     });
+    _init();
     super.initState();
+  }
+
+  _init() async {
+    await buscaCotacao();
+    await SQLiteHelper.instance.listLoansJoin().then((loans) => {
+          ListLoansPage.loanStreamList.add(loans),
+        });
   }
 
   @override
   Widget build(BuildContext context) {
-    SQLiteHelper.instance.listLoansJoin().then((loans) => {
-          ListLoansPage.loanStreamList.add(loans),
-        });
-    buscaCotacao();
     return Scaffold(
       appBar: AppBar(
         title: Text('Empréstimos'),
@@ -41,10 +44,21 @@ class _ListLoansPageState extends State<ListLoansPage> {
             onPressed: () {
               FocusScope.of(context).requestFocus(FocusNode());
               FocusScope.of(context).unfocus();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return NewLoan();
+                  },
+                ),
+              );
             },
             icon: Icon(Mdi.cashPlus),
           ),
         ],
+      ),
+      drawer: SafeArea(
+        child: DrawerNavigationWidget(),
       ),
       body: StreamBuilder(
         stream: ListLoansPage.loanStreamList.stream,
@@ -61,10 +75,28 @@ class _ListLoansPageState extends State<ListLoansPage> {
                     double montante = calculaMontante(
                         loans[index].value, parcelas, loans[index].tax);
                     double valorParcelaDouble = (montante / parcelas);
+                    if (parcelas == 0) {
+                      valorParcelaDouble = double.parse(
+                          loans[index].value!.replaceAll(",", "."));
+                    }
                     String valorParcela =
                         valorParcelaDouble.toString().replaceAll(".", ",");
+                    if (valorParcela
+                            .substring(0, valorParcela.indexOf(","))
+                            .length >
+                        3) {
+                      valorParcela = valorParcela.substring(
+                          0, valorParcela.indexOf(",") + 3);
+                    }
                     String montanteString =
                         montante.toString().replaceAll(".", ",");
+                    if (montanteString
+                            .substring(0, montanteString.indexOf(","))
+                            .length >
+                        3) {
+                      montanteString = montanteString.substring(
+                          0, montanteString.indexOf(",") + 3);
+                    }
                     return Card(
                       clipBehavior: Clip.antiAlias,
                       child: Column(
@@ -132,7 +164,7 @@ class _ListLoansPageState extends State<ListLoansPage> {
                                   TextSpan(text: 'Valor de cada parcela: '),
                                   TextSpan(
                                     text:
-                                        '${loans[index].currency_symbol} ${valorParcela.substring(0, valorParcela.indexOf(",") + 3)}\n',
+                                        '${loans[index].currency_symbol} $valorParcela\n',
                                     style: TextStyle(
                                       fontWeight: FontWeight.normal,
                                     ),
@@ -140,7 +172,7 @@ class _ListLoansPageState extends State<ListLoansPage> {
                                   TextSpan(text: 'Montante: '),
                                   TextSpan(
                                     text:
-                                        '${loans[index].currency_symbol} ${montanteString.substring(0, montanteString.indexOf(",") + 3)}\n\n',
+                                        '${loans[index].currency_symbol} $montanteString\n\n',
                                     style: TextStyle(
                                       fontWeight: FontWeight.normal,
                                     ),
@@ -183,7 +215,7 @@ class _ListLoansPageState extends State<ListLoansPage> {
             }
             return Center(child: Text("Nenhum Empréstimo Cadastrado"));
           }
-          return Container();
+          return Center(child: CircularProgressIndicator());
         },
       ),
     );
@@ -259,5 +291,6 @@ class _ListLoansPageState extends State<ListLoansPage> {
   dispose() {
     super.dispose();
     ListLoansPage.loanStreamList.close();
+    ListLoansPage.loanStreamList = StreamController<List<Loan>>();
   }
 }
