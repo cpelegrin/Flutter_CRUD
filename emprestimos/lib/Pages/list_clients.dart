@@ -149,7 +149,16 @@ class _ListClientsPageState extends State<ListClientsPage> {
                                   primary: Theme.of(context).accentColor,
                                 ),
                                 onPressed: () {
-                                  // Perform some action
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) {
+                                        return NewClient(
+                                          client: clients[index],
+                                        );
+                                      },
+                                    ),
+                                  );
                                 },
                                 child: const Text('Atualizar Cadastro'),
                               ),

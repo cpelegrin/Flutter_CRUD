@@ -9,7 +9,16 @@ import 'package:mdi/mdi.dart';
 
 import 'list_clients.dart';
 
-class NewClient extends StatelessWidget {
+class NewClient extends StatefulWidget {
+  Client? client;
+
+  NewClient({this.client});
+
+  @override
+  _NewClientState createState() => _NewClientState();
+}
+
+class _NewClientState extends State<NewClient> {
   final _formKey = GlobalKey<FormState>();
 
   final _tName = TextEditingController();
@@ -24,6 +33,19 @@ class NewClient extends StatelessWidget {
   final _fRG = FocusNode();
   final _fTel = FocusNode();
   final _fEmail = FocusNode();
+
+  @override
+  void initState() {
+    if (widget.client != null) {
+      _tName.text = widget.client!.name!;
+      _tBirthDate.text = widget.client!.birth_date!;
+      _tCPF.text = widget.client!.cpf!;
+      _tRG.text = widget.client!.RG!;
+      _tTel.text = widget.client!.tel!;
+      _tEmail.text = widget.client!.email!;
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -223,7 +245,13 @@ class NewClient extends StatelessWidget {
         _tTel.text,
         _tEmail.text,
       );
-      await SQLiteHelper.instance.insertClient(c);
+      if (widget.client != null) {
+        c.setId(widget.client!.id!);
+        await SQLiteHelper.instance.updateClient(c);
+      } else {
+        await SQLiteHelper.instance.insertClient(c);
+      }
+
       await SQLiteHelper.instance.listClients().then((clients) => {
             NewLoan.clientStreamList.add(clients),
             ListClientsPage.clientStreamList.add(clients),

@@ -123,6 +123,18 @@ class SQLiteHelper {
     });
   }
 
+  updateClient(client) async {
+    await _createTables();
+    await _database!.update(
+      'clients',
+      client.toMap(),
+      // Ensure that the Dog has a matching id.
+      where: 'client_id = ?',
+      // Pass the Dog's id as a whereArg to prevent SQL injection.
+      whereArgs: [client.id],
+    );
+  }
+
   deleteClient(client_id) async {
     await _createTables();
     return await _database!.delete(
