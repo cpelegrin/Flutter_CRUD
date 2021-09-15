@@ -118,9 +118,12 @@ class _ListClientsPageState extends State<ListClientsPage> {
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   primary: Colors.white,
-                                  onPrimary: Theme.of(context).accentColor,
+                                  onPrimary:
+                                      Theme.of(context).colorScheme.secondary,
                                   side: BorderSide(
-                                      color: Theme.of(context).accentColor,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
                                       width: 1),
                                 ),
                                 onPressed: () async {
@@ -146,7 +149,8 @@ class _ListClientsPageState extends State<ListClientsPage> {
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   onPrimary: Colors.white,
-                                  primary: Theme.of(context).accentColor,
+                                  primary:
+                                      Theme.of(context).colorScheme.secondary,
                                 ),
                                 onPressed: () {
                                   Navigator.push(

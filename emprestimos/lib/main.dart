@@ -14,7 +14,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Color(0xFFB00020),
         primaryColorDark: Color(0xFF630012),
-        accentColor: Color(0xFF02B322),
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+          primary: Color(0xFFB00020),
+          secondary: Color(0xFF02B322),
+        ),
       ),
       home: ListLoansPage(),
     );
