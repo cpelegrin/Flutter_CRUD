@@ -1,8 +1,9 @@
+import 'package:emprestimos/Models/loan.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-import 'Models/client.dart';
+import '../Models/client.dart';
 
 class SQLiteHelper {
   ///Definição do Singleton
@@ -29,7 +30,7 @@ class SQLiteHelper {
           ')',
         );
       },
-      version: 3,
+      version: 1,
     );
 
     _database!.execute(
@@ -37,6 +38,7 @@ class SQLiteHelper {
       'loan_id INTEGER PRIMARY KEY, '
       'date_of_loan TEXT,'
       'currency_symbol TEXT,'
+      'currency_name TEXT,'
       'value TEXT,'
       'maturity TEXT,'
       'tax TEXT,'
@@ -67,8 +69,63 @@ class SQLiteHelper {
         maps[i]['RG'],
         maps[i]['tel1'],
         maps[i]['email'],
-        id: maps[i]['id'],
+        id: maps[i]['client_id'],
       );
     });
+  }
+
+  selectClientById(id) async {
+    await _createTables();
+    final List<Map<String, dynamic>> maps =
+        await _database!.query('clients', where: "client_id == $id");
+
+    return List.generate(maps.length, (i) {
+      return Client(
+        maps[i]['name'],
+        maps[i]['birth_date'],
+        maps[i]['cpf'],
+        maps[i]['RG'],
+        maps[i]['tel1'],
+        maps[i]['email'],
+        id: maps[i]['client_id'],
+      );
+    });
+    // return null;
+  }
+
+  insertLoan(loan) async {
+    await _createTables();
+    await _database!.insert(
+      'loans',
+      loan.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<List<Loan>> listLoansJoin() async {
+    await _createTables();
+    final List<Map<String, dynamic>> maps = await _database!.rawQuery(
+        'SELECT *, name FROM loans INNER JOIN clients USING(client_id)');
+
+    return List.generate(maps.length, (i) {
+      return Loan(
+        maps[i]['currency_symbol'],
+        maps[i]['currency_name'],
+        maps[i]['value'],
+        maps[i]['maturity'],
+        maps[i]['tax'],
+        date_of_loan: maps[i]['date_of_loan'],
+        client_id: maps[i]['client_id'],
+        loan_id: maps[i]['loan_id'],
+        clientName: maps[i]['name'],
+      );
+    });
+  }
+
+  queryaAll() async {
+    _createTables();
+    List<Map> names = await _database!.rawQuery(
+        'SELECT *, name FROM loans INNER JOIN clients USING(client_id)');
+    print(names);
   }
 }

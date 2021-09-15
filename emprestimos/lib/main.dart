@@ -1,3 +1,4 @@
+import 'package:emprestimos/Pages/list_loans.dart';
 import 'package:flutter/material.dart';
 
 import 'Pages/new_client.dart';
@@ -19,11 +20,7 @@ class MyApp extends StatelessWidget {
         primaryColorDark: Color(0xFF630012),
         accentColor: Color(0xFF02B322),
       ),
-      home: NewLoan(),
-      // routes: {
-      //   '/': (context) => const FirstScreen(),
-      //   '/second': (context) => const SecondScreen(),
-      // },
+      home: ListLoansPage(),
     );
   }
 }

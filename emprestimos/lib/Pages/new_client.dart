@@ -1,6 +1,7 @@
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:emprestimos/Models/client.dart';
-import 'package:emprestimos/sqlite_helper.dart';
+import 'package:emprestimos/Pages/new_loan.dart';
+import 'package:emprestimos/Utils/sqlite_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:form_field_validator/form_field_validator.dart';
@@ -221,7 +222,9 @@ class NewClient extends StatelessWidget {
         _tEmail.text,
       );
       await SQLiteHelper.instance.insertClient(c);
-
+      await SQLiteHelper.instance.listClients().then((clients) => {
+            NewLoan.clientStreamList.add(clients),
+          });
       final snackBar = SnackBar(
         content: Text('Cliente Salvo com sucesso!'),
         action: SnackBarAction(

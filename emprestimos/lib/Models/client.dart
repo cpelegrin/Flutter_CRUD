@@ -16,7 +16,7 @@ class Client {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      'client_id': id,
       'name': name,
       'birth_date': birth_date,
       'cpf': cpf,
